@@ -3,8 +3,7 @@ import "./login.css";
 import { useNavigate } from 'react-router';
 import "./registration";
 
-
-const Login =()=>{
+const Login =(props)=>{
   const history = useNavigate();
   const[user,setUser] = useState({
     email:'',
@@ -18,25 +17,31 @@ setUser({
   [name]:value
 })
 }
-
-const userlogin= ()=>{
-  const {email,password,message} = user
+const userlogin= (event)=>{
+event.preventDefault()
+  const {email,password} = user
     fetch("http://localhost:8080/cliniclogin",
     {
       method : 'POST',
       headers : {
         'Content-Type':'application/json'
       },
-      body : JSON.stringify(user)
+      body:JSON.stringify(user)
     }).then(response=>response.json()).then(data=>
       {
-      console.log(data.message);
-      // history("/registration")
+      if(data.status){
+        history("/home")
+        alert(data.message);
+        props.changemenu(false)
+      }
+      else{
+        alert(data.err);
+      }
     })
-    // .    catch(err=>{
-    //   console.log(err);
-    //  alert('invalid user')
-    // })
+    .catch(err=>{
+      console.log(err);
+     alert('invalid user')
+    })
     }
 return(
 <form class="signup-form" onSubmit={userlogin}>
@@ -55,7 +60,7 @@ return(
     </div>    
 </div>
 <div class="form-footer">
-  <button type="submit" class="btn" >login</button>&nbsp;&nbsp;
+  <button type="submit" class="btn">login</button>&nbsp;&nbsp;
   &nbsp;&nbsp;&nbsp;<button  class="btn" onClick={()=>history('/registration')} >register</button>
 </div>
 </form>

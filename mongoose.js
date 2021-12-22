@@ -137,7 +137,6 @@ const clinicuser = new mongoose.Schema({
             }
         })
     })
-
     app.post("/cliniclogin",(req,res)=>{
     console.log('hello')
     let {email,password} = req.body
@@ -147,14 +146,12 @@ const clinicuser = new mongoose.Schema({
                 console.log(data.password+"  "+password );
                 if(password===data.password)
                 {
-                    console.log("sucessfull")
-                    res.send({message:"login sucessfully"})
-                    
+                res.send({message:"login sucessfully",status:true});
                 }
                 else{
-                    res.send({message:"invalid login"})
+                    res.send({message:"invalid login",status:false})
                 }
-            }
+               }
             else{
                 res.send({message:"this email is not registered with us....sorry!!!"})
             }
